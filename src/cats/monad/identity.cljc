@@ -61,20 +61,15 @@
            (= v (.-v other))
            false))]))
 
-(defn identity->str
-  [mv]
-  (str "#<Identity " (pr-str (.-v mv)) ">"))
-
 #?(:clj
    (defmethod print-method Identity
      [mv writer]
-     (.write writer (identity->str mv))))
-
-#?(:cljs
+     (.write writer (cats.core/str mv)))
+   :cljs
    (extend-type Identity
      IPrintWithWriter
      (-pr-writer [mv writer _]
-       (-write writer (identity->str mv)))))
+       (-write writer (cats.core/str mv)))))
 
 (alter-meta! #'->Identity assoc :private true)
 
