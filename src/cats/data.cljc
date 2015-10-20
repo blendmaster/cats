@@ -73,20 +73,15 @@
   p/Extract
   (-extract [_] [fst snd]))
 
-(defn pair->str
-  [mv]
-  (str "#<Pair [" (pr-str (.-fst mv)) " " (pr-str (.-snd mv)) "]>"))
-
 #?(:clj
    (defmethod print-method Pair
      [mv writer]
-     (.write writer (pair->str mv))))
-
-#?(:cljs
+     (.write writer (cats.core/str mv)))
+   :cljs
    (extend-type Pair
      IPrintWithWriter
      (-pr-writer [mv writer _]
-       (-write writer (pair->str mv)))))
+       (-write writer (cats.core/str mv)))))
 
 (alter-meta! #'->Pair assoc :private true)
 
