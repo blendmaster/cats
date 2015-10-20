@@ -66,20 +66,15 @@
            (= v (.-v other))
            false))]))
 
-(defn- just->str
-  [mv]
-  (str "#<Just " (pr-str (.-v mv)) ">"))
-
 #?(:clj
    (defmethod print-method Just
      [mv writer]
-     (.write writer (just->str mv))))
-
-#?(:cljs
+     (.write writer (cats.core/str mv)))
+   :cljs
    (extend-type Just
      IPrintWithWriter
      (-pr-writer [mv writer _]
-       (-write writer (just->str mv)))))
+       (-write writer (cats.core/str mv)))))
 
 (deftype Nothing []
   p/Contextual
@@ -105,13 +100,12 @@
 #?(:clj
    (defmethod print-method Nothing
      [mv writer]
-     (.write writer "#<Nothing>")))
-
-#?(:cljs
+     (.write writer (cats.core/str mv)))
+   :cljs
    (extend-type Nothing
      IPrintWithWriter
-     (-pr-writer [_ writer _]
-       (-write writer "#<Nothing>"))))
+     (-pr-writer [mv writer _]
+       (-write writer (cats.core/str mv)))))
 
 (alter-meta! #'->Nothing assoc :private true)
 (alter-meta! #'->Just assoc :private true)
