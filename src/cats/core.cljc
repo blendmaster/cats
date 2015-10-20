@@ -778,7 +778,9 @@
   "TODO: write docstring"
   [mv]
   (or (clojure.core/when (satisfies? p/Extract mv)
-        (when-let [klass (some-> (class mv) (. getSimpleName))]
+        (when-let [kind #?(:clj  (some-> (class mv) (. getSimpleName))
+                           :cljs (some-> (type mv)
+                                   pr-str (clojure.string/split #"/") last))]
           (let [v (some->> (extract mv) pr-str (clojure.core/str " "))]
-            (clojure.core/str "#<" klass v ">"))))
+            (clojure.core/str "#<" kind v ">"))))
       (clojure.core/str mv)))
