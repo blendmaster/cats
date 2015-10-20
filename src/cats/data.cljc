@@ -68,7 +68,10 @@
       false))
 
   p/Contextual
-  (-get-context [data] context))
+  (-get-context [data] context)
+
+  p/Extract
+  (-extract [_] [fst snd]))
 
 (defn pair->str
   [mv]
